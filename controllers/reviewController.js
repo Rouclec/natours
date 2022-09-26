@@ -10,9 +10,6 @@ const catchAsync = require('../utils/errorHandling');
 
 exports.checkUser = catchAsync(async (req, res, next) => {
   const review = await Review.findById(req.params.id);
-
-  console.log('user: ', req.user);
-  console.log('review ', review);
   if (!req.user._id.equals(review.user._id)) {
     return next(
       res.status(401).json({

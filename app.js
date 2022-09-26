@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const compression = require('compression')
 
 const userRouter = require('./routes/userRoutes');
 const tourRouter = require('./routes/tourRoutes');
@@ -22,6 +23,7 @@ app.use(xss()); //clean user input from malatious html code
 app.use(hpp()); //prevents parameter pollution
 app.use(express.json({ limit: '10kb' })); //Body parser, reading json data from body (limited to 10kb)
 app.use(express.static(`${__dirname}/public`)); //serving static files
+app.use(compression()) //compress all the text responses sent to client
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));

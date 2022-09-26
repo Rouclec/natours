@@ -22,7 +22,6 @@ const createSendToken = (user, statusCode, res) => {
     httpOnly: true,
   };
 
-  console.log(cookieOptions.secure);
   res.cookie('jwt', token, cookieOptions);
 
   user.password = undefined; //to remove password field from the query
@@ -169,7 +168,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
     await new Email(user, resetURL).sendPasswordReset();
   } catch (error) {
-    console.log('ERROR: ', error);
     user.resetToken = undefined;
     user.resetTokenExpiration = undefined;
     await user.save({ validateBeforeSave: false });
@@ -207,7 +205,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     );
   }
 
-  console.log(await user.correctPassword(req.body.password, user.password));
   if (await user.correctPassword(req.body.password, user.password)) {
     return next(
       res.status(500).json({
@@ -219,7 +216,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // 3) update the user
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
-  console.log('password confirm ', user.passwordConfirm);
   user.resetToken = undefined;
   user.resetTokenExpiration = undefined;
 
